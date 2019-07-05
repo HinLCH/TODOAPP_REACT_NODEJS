@@ -1,8 +1,14 @@
 
 const express = require('express');
-const fs = require('fs');
+//const fs = require('fs');
 var cors = require('cors');
 var bodyParser = require('body-parser')
+//since user need to login to use the app
+//express-sesion was chosen to be the middleware
+//if user have not login, he/she cannot access to todoapp
+var session = require('express-session');
+
+
 
 var app = express() ;
 //connect MYSQL 
@@ -14,6 +20,11 @@ var con = mysql.createConnection({
   database : 'nodejs_todolist'
 });
 
+// app.use(session({
+//     secret: 'secret',
+// 	resave: flase,
+// 	saveUninitialized: flase
+// }));
 
 //
 app.use(cors());
@@ -54,11 +65,19 @@ app.post('/login',function (req,res){
                     }
                     else{
                         if(result[0]!=null){
+                        //password and username correct
+                        //
                         console.log("success");
+                      
+                        // req.session.login = true;
+                      
                         res.json("success")
+                        // console.log("req.session.loggedin :",req.session.loggedin)
+                        //
                         }else{
                         console.log("password incorrect")
                         res.json("Password incorrect");  
+                        res.redirect('/checksession');
                         }
                     }   
                 })   
@@ -75,11 +94,16 @@ app.post('/login',function (req,res){
 
 })
 
-
-
-
-
-
+app.post('/checksession',function (req,res){
+    if (req.session.loggedin) {
+        console.log("you have save the session")
+		//res.send("approve");
+	} else {
+        //response.send('Please login to view this page!');
+        console.log("no session")
+	}
+	
+})
 
 
 app.get('/getJson',function (req,res) {
@@ -88,10 +112,12 @@ app.get('/getJson',function (req,res) {
     await    con.query("SELECT * FROM todoitem",function(err, result) {
             if(err) {
             console.log(err); 
+            
             res.json({"error":true});
                 }
             else { 
             //console.log(result); this is RowDataPacket
+            
             res.json(result);                     
             }
         });       

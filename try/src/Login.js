@@ -6,7 +6,7 @@ class Login extends React.Component {
         this.state = {
             userName:"",
             password:"",
-           
+            login:false
         }
         this.handleChange=this.handleChange.bind(this)
         this.handleSubmit=this.handleSubmit.bind(this)
@@ -27,7 +27,6 @@ class Login extends React.Component {
             userName:"",
             password:""
         })
-        
         console.log("requestBody",requestBody)
         fetch("http://localhost:5000/login",{
           method: "post", 
@@ -42,7 +41,7 @@ class Login extends React.Component {
          .then((test)=>{
             console.log("success?",test)
             if (test === "success"){
-                window.location= '/todoapp';
+                window.location= '/todoapp'
             } else {
                 alert("incorrect username or password")
             }
@@ -59,7 +58,7 @@ class Login extends React.Component {
                     <button>Login</button>
                 </form>
             </div>
-        )}
+    )}
 }
 
 export default Login;

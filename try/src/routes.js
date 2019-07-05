@@ -1,5 +1,6 @@
 import Todoapp from './Todoapp'
 import Login from './Login'
+import Error from './Error'
 
 const routes = [
     {
@@ -9,6 +10,10 @@ const routes = [
     {
         path: '/login',
         component: Login
+    },
+    {
+        path:'/error',
+        component: Error
     }
 ];
 

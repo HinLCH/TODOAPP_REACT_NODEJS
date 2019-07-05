@@ -14,8 +14,11 @@ class Todoapp extends React.Component {
     this.handleChange=this.handleChange.bind(this)
     this.handleRestart=this.handleRestart.bind(this)
     this.handleDelete=this.handleDelete.bind(this)
-  
+    this.handleLogout=this.handleLogout.bind(this)
   }
+
+
+
   //getJson
   getJson(){
     fetch("http://localhost:5000/getJson",{
@@ -115,6 +118,10 @@ class Todoapp extends React.Component {
       });   
   }
 
+  //handelLogout
+  handleLogout(event){
+    console.log("handleLogout is running")
+  }
 
   render(){
     return( 
@@ -141,6 +148,7 @@ class Todoapp extends React.Component {
           </div>  
         )}  
         <p>hi</p>
+        <button onClick={this.handleLogout}>Logout</button>
       </div>
     ) 
   }
