@@ -12,6 +12,7 @@ class Login extends React.Component {
         this.handleSubmit=this.handleSubmit.bind(this)
     }
 
+
     handleChange(event){
         this.setState({
           [event.target.name]: event.target.value
@@ -38,14 +39,17 @@ class Login extends React.Component {
          .then(res => {
              return res.json();
         })
-         .then((test)=>{
+          .then((test)=>{
             console.log("success?",test)
-            if (test === "success"){
-                window.location= '/todoapp'
+            var response = JSON.parse(test);
+            if (response.redirect){
+                document.cookie="username=test";
+                window.location = response.redirect;
+                //window.location= response
             } else {
                 alert("incorrect username or password")
             }
-            })
+            }) 
     }
     
     render(){
@@ -54,7 +58,7 @@ class Login extends React.Component {
                 Login Page
                 <form onSubmit={this.handleSubmit} >
                     <input type="text" name="userName" value={this.state.userName} onChange={this.handleChange}/><br/>
-                    <input type="text" name="password" value={this.state.password} onChange={this.handleChange}/><br/>
+                    <input type="password" name="password" value={this.state.password} onChange={this.handleChange}/><br/>
                     <button>Login</button>
                 </form>
             </div>

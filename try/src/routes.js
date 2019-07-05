@@ -1,6 +1,6 @@
 import Todoapp from './Todoapp'
 import Login from './Login'
-import Error from './Error'
+import Err from './Error'
 
 const routes = [
     {
@@ -13,7 +13,7 @@ const routes = [
     },
     {
         path:'/error',
-        component: Error
+        component: Err
     }
 ];
 

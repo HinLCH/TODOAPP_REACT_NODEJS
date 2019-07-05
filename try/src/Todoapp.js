@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 class Todoapp extends React.Component {
   constructor(){ 
     super()
@@ -17,7 +18,32 @@ class Todoapp extends React.Component {
     this.handleLogout=this.handleLogout.bind(this)
   }
 
-
+  componentWillMount(){
+    console.log("componentWillMount is running")
+    console.log(document.cookie);
+     function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+    console.log(getCookie("username"));
+    if (getCookie("username") == ""){
+       window.location = '/error';
+    }
+    // fetch("http://localhost:5000/checksession",{
+    //   method:"get"
+    // })
+  }
 
   //getJson
   getJson(){
@@ -121,6 +147,8 @@ class Todoapp extends React.Component {
   //handelLogout
   handleLogout(event){
     console.log("handleLogout is running")
+    document.cookie="username= ";
+    window.location='/'
   }
 
   render(){

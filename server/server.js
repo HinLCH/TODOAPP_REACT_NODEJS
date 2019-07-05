@@ -6,9 +6,8 @@ var bodyParser = require('body-parser')
 //since user need to login to use the app
 //express-sesion was chosen to be the middleware
 //if user have not login, he/she cannot access to todoapp
-var session = require('express-session');
-
-
+//update:since it is no a SPA, session cannot be used
+//var session = require('express-session');
 
 var app = express() ;
 //connect MYSQL 
@@ -20,13 +19,12 @@ var con = mysql.createConnection({
   database : 'nodejs_todolist'
 });
 
-// app.use(session({
-//     secret: 'secret',
-// 	resave: flase,
-// 	saveUninitialized: flase
-// }));
+app.use(session({
+    secret: 'secret',
+	resave: false,
+	saveUninitialized: false
+}));
 
-//
 app.use(cors());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -57,7 +55,7 @@ app.post('/login',function (req,res){
             }
             else{
                 if(result[0] != null){
-                console.log(result);
+                console.log("result",result);
                 await con.query("SELECT '"+userName+ "' FROM users WHERE password='"+password+"'",function(err,result){
                     if(err) {
                         console.log(err); 
@@ -65,19 +63,20 @@ app.post('/login',function (req,res){
                     }
                     else{
                         if(result[0]!=null){
-                        //password and username correct
-                        //
+                        // password and username correct
                         console.log("success");
-                      
-                        // req.session.login = true;
-                      
-                        res.json("success")
+                        req.session.login = true;
+                        req.session.loggedin = true;
+                        response = JSON.stringify({"redirect":"/todoapp"});
+                        res.json(response)
+                        //res.redirect('/checksession');
+                        res.end();
+                       
                         // console.log("req.session.loggedin :",req.session.loggedin)
-                        //
                         }else{
                         console.log("password incorrect")
                         res.json("Password incorrect");  
-                        res.redirect('/checksession');
+                         
                         }
                     }   
                 })   
@@ -87,38 +86,28 @@ app.post('/login',function (req,res){
                 }
             }
         })
-        
     }
     getUser()
-        //check username
-
 })
 
-app.post('/checksession',function (req,res){
+/*app.get('/checksession',function (req,res){
     if (req.session.loggedin) {
-        console.log("you have save the session")
-		//res.send("approve");
-	} else {
-        //response.send('Please login to view this page!');
-        console.log("no session")
+            console.log("req.session.loggedin ture",req.session.loggedin)
+		} else {
+            console.log("req.session.loggedin false",req.session.loggedin)
 	}
-	
-})
-
+})*/
 
 app.get('/getJson',function (req,res) {
     async function getData(){
     await    res.setHeader('Content-Type', 'application/json');
     await    con.query("SELECT * FROM todoitem",function(err, result) {
             if(err) {
-            console.log(err); 
-            
+            console.log(err);  
             res.json({"error":true});
-                }
+            }
             else { 
-            //console.log(result); this is RowDataPacket
-            
-            res.json(result);                     
+              res.json(result);                     
             }
         });       
     }

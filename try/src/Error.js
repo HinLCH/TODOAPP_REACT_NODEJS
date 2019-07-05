@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Error extends React.Component {
+class Err extends React.Component {
   constructor(){ 
     super()
     this.goBack = this.goBack.bind(this)    
@@ -14,10 +14,10 @@ class Error extends React.Component {
     render(){
         return(
             <div>   
-               please login to use the todoapp<br/>
+               please login to use the todoapp app<br/>
                <button onClick = {this.goBack}>Go back</button>
             </div>
         )}
 }
 
-export default Error;
+export default Err;
